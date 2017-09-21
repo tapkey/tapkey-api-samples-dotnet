@@ -44,7 +44,7 @@ namespace TapkeyApiSampleConsole
             // Check if the current user has at least one owner account
             if (ownerAccounts.Count > 0)
             {
-                // Take the frist owner account...
+                // Take the first owner account...
                 var ownerAccount = ownerAccounts.First()["id"];
                 // ... and query for bound locks
                 var boundLockTask = client.GetStringAsync(
