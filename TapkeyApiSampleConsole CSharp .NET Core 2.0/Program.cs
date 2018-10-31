@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.CommandLineUtils;
 using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TapkeyApiSampleConsole.OAuth2;
+using OAuthHelpers;
 
 namespace TapkeyApiSampleConsole
 {
@@ -44,43 +44,45 @@ namespace TapkeyApiSampleConsole
             // Check if the current user has at least one owner account
             if (ownerAccounts.Count > 0)
             {
-                // Take the first owner account...
-                var ownerAccount = ownerAccounts.First()["id"];
-                // ... and query for bound locks
-                var boundLockTask = client.GetStringAsync(
-                    $"{new Uri(TapkeyApiUri, TapkeyApiVersion).AbsoluteUri}/owners/{ownerAccount}/boundlocks");
-                json = await boundLockTask;
+                // Loop over user's Owner Accounts...
+                foreach (var ownerAccount in ownerAccounts)
+                {
+                    // ... and query for bound locks
+                    var boundLockTask = client.GetStringAsync(
+                        $"{new Uri(TapkeyApiUri, TapkeyApiVersion).AbsoluteUri}/owners/{ownerAccount["id"]}/boundlocks");
+                    json = await boundLockTask;
 
-                var boundLocks =
-                    JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(json);
-                // Make sure the selected owner account has bound locks
-                if (boundLocks.Count > 0)
-                {
-                    // Print a list of all bound locks
-                    foreach (var boundLock in boundLocks)
+                    var boundLocks =
+                        JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(json);
+                    // Make sure the selected owner account has bound locks
+                    if (boundLocks.Count > 0)
                     {
-                        var lockInfo = new StringBuilder();
-                        lockInfo.AppendLine("-------------------------");
-                        lockInfo.AppendLine($"Lock ID: {boundLock["id"]}");
-                        lockInfo.AppendLine($"Title: {boundLock["title"]}");
-                        lockInfo.AppendLine($"Description: {boundLock["description"]}");
-                        lockInfo.AppendLine($"Lock is active: {boundLock["active"]}");
-                        lockInfo.AppendLine(
-                            $"Lock model name: {(boundLock["lockType"] as JObject)?.GetValue("modelName")}");
-                        lockInfo.AppendLine($"Binding date: {boundLock["bindDate"]}");
-                        lockInfo.AppendLine("-------------------------");
-                        lockInfo.AppendLine();
-                        Console.WriteLine(lockInfo);
+                        Console.WriteLine($"Displaying Bound Locks for Owner Account {ownerAccount["name"]} ({ownerAccount["id"]}):");
+
+                        // Print a list of all bound locks
+                        foreach (var boundLock in boundLocks)
+                        {
+                            var lockInfo = new StringBuilder();
+                            lockInfo.AppendLine("-------------------------");
+                            lockInfo.AppendLine($"Lock ID: {boundLock["id"]}");
+                            lockInfo.AppendLine($"Title: {boundLock["title"]}");
+                            lockInfo.AppendLine($"Description: {boundLock["description"]}");
+                            lockInfo.AppendLine(
+                                $"Lock model name: {(boundLock["lockType"] as JObject)?.GetValue("modelName")}");
+                            lockInfo.AppendLine($"Binding date: {boundLock["bindDate"]}");
+                            lockInfo.AppendLine("-------------------------");
+                            Console.WriteLine(lockInfo);
+                        }
                     }
-                }
-                else
-                {
-                    Console.WriteLine($"No bound locks for owner account {ownerAccount}.");
+                    else
+                    {
+                        Console.WriteLine($"No bound locks for owner account {ownerAccount["name"]} ({ownerAccount["id"]}).");
+                    }
                 }
             }
             else
             {
-                Console.WriteLine("No owner account found.");
+                Console.WriteLine("This user has no Owner Accounts.");
             }
         }
 

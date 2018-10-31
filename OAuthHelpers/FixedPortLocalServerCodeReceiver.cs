@@ -30,13 +30,13 @@ using System.Threading.Tasks;
 using Google;
 using Google.Apis.Auth.OAuth2;
 
-namespace TapkeyApiSampleConsole.OAuth2
+namespace OAuthHelpers
 {
     /// <summary>
     /// OAuth 2.0 verification code receiver that runs a local server on a free port and waits for a call with the 
     /// authorization verification code.
     /// </summary>
-    public class FixedPortLocalServerCodeReceiver : ICodeReceiver
+    class FixedPortLocalServerCodeReceiver : ICodeReceiver
     {
         private int Port { get; }
         private static readonly ILogger Logger = ApplicationContext.Logger.ForType<LocalServerCodeReceiver>();

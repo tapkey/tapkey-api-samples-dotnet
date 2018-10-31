@@ -5,7 +5,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Util.Store;
 
-namespace TapkeyApiSampleConsole.OAuth2
+namespace OAuthHelpers
 {
     public static class AuthorizeTapkey
     {

@@ -1,14 +1,14 @@
-# Tapkey API Console Sample
-An exemplary application that demonstrates accessing Tapkey's API via a .NET Core 2.0 console
-application. This application will print a list of all locking devices bound to a user's owner
-account.
+﻿# Tapkey API Console Sample in Visual Basic
+An exemplary console application written in Visual Basic using .NET Framework 4.6, that demonstrates accessing
+Tapkey's API. This application will print a list of all locking products bound to the user's Owner
+Accounts.
 
 ## Prerequisites
 You need to create a Tapkey Client Application prior to running this example in order to be able to
 authenticate using Tapkey's OAuth 2.0 service.
 
 ## Technology used
-* .NET Core 2.0
+* .NET Framework 4.6
 * [Google API .NET Client Library][1] (for handling OAuth 2.0 flow)
 * [Microsoft.Extensions.CommandLineUtils][2] (for command line argument processing)
 
@@ -24,24 +24,30 @@ Options:
 
 ## Example output
 ```
+Displaying Bound Locks for Owner Account Tapkey (6426d8f8-••••-••••-••••-••••••••••••):
+
 Lock ID: 43301e56-••••-••••-••••-••••••••••••
 Title: Sebastian's Lock
 Description: This is my first Tapkey lock.
-Lock is active: True
 Lock model name: Td20
 Binding date: 02-Jun-17 8:18:56
+
 ```
 
 ## Structure
-All relevant code for retrieving information about locking devices is located in `Program.cs`. Those
-classes inside the `OAuth2` directory are being used for OAuth2.0 authorization only. Even more
+All relevant code for retrieving information about locking devices is located in `Program.vb`. The
+classes inside the `OAuthHelpers` project are being used for OAuth2.0 authorization only. More
 specific, `QueryBoundLocks()` contains the steps required for retrieving and displaying data.
 
 ### Outline
 1. Authorize against Tapkey's OAuth 2.0 service
-2. Retrieve owner accounts for the present user, and select the first one (this is a demo)
-3. Retrieve bound locks for that owner account
+2. Retrieve Owner Accounts for the present user, and iterate over them
+3. Retrieve Bound Locks for the current Owner Account
 4. Display information
+
+## Token storage
+This application will cache access tokens issued by Tapkey. To reset the cache, delete the
+`TapkeyApi` folder in your `AppData`.
 
 # License
 Copyright (c) Tapkey GmbH. All rights reserved.
