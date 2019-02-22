@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron">
+    <h2 class="display-5">Authorization Code with PKCE - Tapkey API</h2>
+    <p class="lead">
+        This is a ASP.NET MVC app that simulates a "native" client. The app authenticates against the Tapkey Authorization Server
+        using the Authorization Code with PKCE flow and lists all the locking devices registered under the user's owner accounts.
+    </p>
+    <hr class="my-4">
+    <p>To start the authentication, click in the button below!</p>
+
+    <a asp-action="Login"
+       asp-controller="Auth"
+       class="btn btn-primary btn-lg"
+       role="button">Click here to start</a>
+</div>
