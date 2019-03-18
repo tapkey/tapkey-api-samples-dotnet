@@ -1,0 +1,59 @@
+﻿@model List<MVCAppAuthorizationCodePKCE.NETCore.Models.OwnerWithLocksViewModel>
+
+<div class="text-center">
+    <h1 class="display-4">Owner account locks</h1>
+    <p>Listing all user's locking devices.</p>
+</div>
+
+<div class="container">
+
+    @if (!Model.Any())
+    {
+        <div class="row">
+            <div class="col mb-2">
+                <div class="alert alert-secondary" role="alert">
+                    This user has no Owner Accounts.
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var ownerWithLocks in Model)
+        {
+            <div>
+                <div class="row">
+                    <div class="col mb-2">
+                        <h3>@ownerWithLocks.Owner.Name - (@ownerWithLocks.Owner.Id)</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    @if (!ownerWithLocks.OwnerLocks.Any())
+                    {
+                        <div class="alert alert-secondary" role="alert">
+                            No bound locks for this owner account.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-deck">
+                            @foreach (var ownerLock in ownerWithLocks.OwnerLocks)
+                            {
+                                <div class="card mb-5" style="width: 18rem;">
+                                    <img src="https://storage.googleapis.com/tapkey-media/tapkey_logo_blue_square.svg" class="card-img-top" alt="tapkey logo">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@ownerLock.Title</h5>
+                                        <p class="card-text">@ownerLock.Description</p>
+                                        <p class="card-text"><small class="text-muted">Bind date: @ownerLock.BindDate</small></p>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
+
