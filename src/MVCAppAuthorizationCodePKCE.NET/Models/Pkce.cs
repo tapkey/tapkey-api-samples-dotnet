@@ -1,4 +1,4 @@
-﻿namespace MVCAppAuthorizationCodePKCE.NETCore.Models
+﻿namespace MVCAppAuthorizationCodePKCE.NET.Models
 {
     public class Pkce
     {

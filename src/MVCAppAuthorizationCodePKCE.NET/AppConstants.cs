@@ -1,4 +1,4 @@
-﻿namespace MVCAppAuthorizationCodePKCE.NETCore
+﻿namespace MVCAppAuthorizationCodePKCE.NET
 {
     public class AppConstants
     {

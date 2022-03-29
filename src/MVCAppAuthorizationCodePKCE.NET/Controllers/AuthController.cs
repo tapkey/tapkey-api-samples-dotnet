@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using MVCAppAuthorizationCodePKCE.NETCore.Models;
+using MVCAppAuthorizationCodePKCE.NET.Models;
 
-namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
+namespace MVCAppAuthorizationCodePKCE.NET.Controllers
 {
     public class AuthController : Controller
     {
@@ -57,7 +53,7 @@ namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
             {
                 {"client_id", _appConfiguration.ClientId},
                 {"scope", "read:core:entities read:owneraccounts offline_access"},
-                {"redirect_uri", "http://localhost:55183/Auth/LoginCallback"},
+                {"redirect_uri", "https://localhost:44333/Auth/LoginCallback"},
                 {"response_type", "code"},
 
                 // Provide the Code Challenge along with the method (Sha256)
@@ -85,7 +81,7 @@ namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
             {
                 {"client_id", _appConfiguration.ClientId},
                 {"grant_type", "authorization_code"},
-                {"redirect_uri", "http://localhost:55183/Auth/LoginCallback"},
+                {"redirect_uri", "https://localhost:44333/Auth/LoginCallback"},
                 {"code", code},
                 {"code_verifier", pkce.CodeVerifier}
             };
@@ -93,9 +89,7 @@ namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
             var postContent = new FormUrlEncodedContent(tokenRequest);
 
             var response = await _tapkeyAuthServerClient.PostAsync($"{_appConfiguration.TapkeyTokenEndpointPath}", postContent);
-
-            var tokenResponseString = await response.Content.ReadAsStringAsync();
-            var tokenResponse = new TokenResponse(tokenResponseString);
+            var tokenResponse = await ProtocolResponse.FromHttpResponseAsync<TokenResponse>(response);
 
             _memoryCache.Set(AppConstants.AccessTokenCacheKey, tokenResponse.AccessToken);
             _memoryCache.Set(AppConstants.RefreshTokenCacheKey, tokenResponse.RefreshToken);
@@ -119,8 +113,9 @@ namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
 
             var refreshContent = new FormUrlEncodedContent(refreshTokenRequest);
             var refreshResponse = await _tapkeyAuthServerClient.PostAsync($"{_appConfiguration.TapkeyTokenEndpointPath}", refreshContent);
-            var refreshTokenResponse = new TokenResponse(await refreshResponse.Content.ReadAsStringAsync());
-        
+            //var refreshTokenResponse = new TokenResponse(await refreshResponse.Content.ReadAsStringAsync());
+            var refreshTokenResponse = await ProtocolResponse.FromHttpResponseAsync<TokenResponse>(refreshResponse);
+
             #endregion
 
             return RedirectToAction("Index", "OwnerLocks");

@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using MVCAppAuthorizationCodePKCE.NETCore.Models;
+using MVCAppAuthorizationCodePKCE.NET.Models;
 using Tapkey.Api.Models;
 
-namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
+namespace MVCAppAuthorizationCodePKCE.NET.Controllers
 {
     public class OwnerLocksController : Controller
     {
