@@ -1,4 +1,4 @@
-﻿# Tapkey Management API Console Sample with Client Credentials (C#, .NET Core 2.2) 
+﻿# Tapkey Management API Console Sample with Client Credentials (C#, .NET 6) 
 
 ## Client credentials flow
 
@@ -14,7 +14,7 @@ This application will print a list of all locking products that are managed by t
 
 ### Register your OAuth client with Tapkey
 
-You need to register your client application in the Tapkey portal here: [Manage your OAuth clients](https://my.tapkey.com/AdminUI/#/oauth-clients). 
+You need to register your client application in the Tapkey portal here: [Manage your OAuth clients](https://portal.tapkey.io/oauth-clients). 
 
 For that **make sure you**:
 
@@ -25,7 +25,7 @@ For that **make sure you**:
 
 ### Technical requirements
 
-- .NET Core SDK 2.2
+- .NET 6
 
 ## Usage
 
@@ -33,7 +33,7 @@ You can either run the app via the command line or with Visual Studio.
 
 ### From the command line:
 
-.NET Core applications can be run from the project root directory using `dotnet run`. The following arguments have to be specified:
+.NET applications can be run from the project root directory using `dotnet run`. The following arguments have to be specified:
 
 ```
   -i|--id <clientId> Your client ID.
@@ -45,7 +45,7 @@ Example:
 dotnet run -i my-client-id -s my-secret
 ```
 
-### From Visual Studio 2017 (or upcoming 2019):
+### From Visual Studio 2022:
 
 It's always interesting to run the app in Debug mode to see how things work. To do that, you can set the `clientId` and `clientSecret` in the `launchSettings.json` file under `Properties` in the console project:
 
@@ -85,7 +85,7 @@ Binding date: 02-Jun-17 8:18:56
 
 ## Technology used
 
-* .NET Core 2.2
+* .NET 6
 * [IdentityModel][1] (for handling the Client Credentials flow)
 * [McMaster.Extensions.CommandLineUtils][2] (for command line argument processing)
 

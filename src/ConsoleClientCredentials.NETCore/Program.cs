@@ -1,12 +1,12 @@
 ﻿using IdentityModel.Client;
 using McMaster.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Tapkey.Api.Models;
 
@@ -37,7 +37,7 @@ namespace ConsoleClientCredentials.NETCore
                 "User-Agent",
                 ".NET Core Console Native App Authorization Code with PKCE flow");
 
-            app.OnExecute(async () =>
+            app.OnExecuteAsync(async _ =>
             {
                 if (!clientId.HasValue() || !clientSecret.HasValue())
                 {
@@ -84,12 +84,14 @@ namespace ConsoleClientCredentials.NETCore
 
         private static async Task QueryBoundLocksAsync(string access_token)
         {
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
             _tapkeyApiClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", access_token);
 
             // Get the owner accounts that this service account has access (as co-admin)
             var ownersJsonResponse = await _tapkeyApiClient.GetStringAsync($"{TapkeyApiVersion}/owners");
-            var ownerAccounts = JsonConvert.DeserializeObject<List<OwnerAccount>>(ownersJsonResponse);
+            var ownerAccounts = JsonSerializer.Deserialize<List<OwnerAccount>>(ownersJsonResponse, jsonOptions);
 
             if (!ownerAccounts.Any())
             {
@@ -102,7 +104,7 @@ namespace ConsoleClientCredentials.NETCore
             {
                 // ... and query for bound locks
                 var boundLocksJson = await _tapkeyApiClient.GetStringAsync($"{TapkeyApiVersion}/owners/{ownerAccount.Id}/boundlocks");
-                var boundLocks = JsonConvert.DeserializeObject<List<BoundLock>>(boundLocksJson);
+                var boundLocks = JsonSerializer.Deserialize<List<BoundLock>>(boundLocksJson, jsonOptions);
 
                 // Make sure the selected owner account has bound locks
                 if (!boundLocks.Any())

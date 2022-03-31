@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MVCAppAuthorizationCodePKCE.NETCore.Models;
+using MVCAppAuthorizationCodePKCE.NET.Models;
 
-namespace MVCAppAuthorizationCodePKCE.NETCore.Controllers
+namespace MVCAppAuthorizationCodePKCE.NET.Controllers
 {
     public class HomeController : Controller
     {

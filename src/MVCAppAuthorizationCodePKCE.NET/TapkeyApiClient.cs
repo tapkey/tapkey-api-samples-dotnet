@@ -1,12 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using Tapkey.Api.Models;
 
-namespace MVCAppAuthorizationCodePKCE.NETCore
+namespace MVCAppAuthorizationCodePKCE.NET
 {
     /// <summary>
     /// A typed HttpClient that knows how to talk with the Tapkey API
@@ -33,6 +29,7 @@ namespace MVCAppAuthorizationCodePKCE.NETCore
     {
         private readonly HttpClient _httpClient;
         private const string TapkeyApiVersion = "api/v1";
+        private JsonSerializerOptions jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         public TapkeyApiClient(HttpClient httpClient)
         {
@@ -46,7 +43,7 @@ namespace MVCAppAuthorizationCodePKCE.NETCore
 
             // Get the owner accounts of the authorized user
             var ownersJsonResponse = await _httpClient.GetStringAsync($"{TapkeyApiVersion}/owners");
-            var ownerAccounts = JsonConvert.DeserializeObject<List<OwnerAccount>>(ownersJsonResponse);
+            var ownerAccounts = JsonSerializer.Deserialize<List<OwnerAccount>>(ownersJsonResponse, jsonOptions);
 
             return ownerAccounts;
         }
@@ -63,7 +60,7 @@ namespace MVCAppAuthorizationCodePKCE.NETCore
                 new AuthenticationHeaderValue("Bearer", accessToken);
 
             var boundLocksJson = await _httpClient.GetStringAsync($"{TapkeyApiVersion}/owners/{ownerAccountId}/boundlocks");
-            var boundLocks = JsonConvert.DeserializeObject<List<BoundLock>>(boundLocksJson);
+            var boundLocks = JsonSerializer.Deserialize<List<BoundLock>>(boundLocksJson, jsonOptions);
 
             return boundLocks;
         }

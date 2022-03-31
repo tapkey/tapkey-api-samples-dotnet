@@ -1,6 +1,4 @@
-using System;
-
-namespace MVCAppAuthorizationCodePKCE.NETCore.Models
+namespace MVCAppAuthorizationCodePKCE.NET.Models
 {
     public class ErrorViewModel
     {

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Tapkey.Api.Models;
+﻿using Tapkey.Api.Models;
 
-namespace MVCAppAuthorizationCodePKCE.NETCore.Models
+namespace MVCAppAuthorizationCodePKCE.NET.Models
 {
     public class OwnerWithLocksViewModel
     {

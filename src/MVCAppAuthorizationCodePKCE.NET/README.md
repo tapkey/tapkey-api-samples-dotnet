@@ -25,8 +25,8 @@ You need to register your client application in the Tapkey portal here: [Manage 
 For that **make sure you**:
 
 1. Select the `Authorization Code` flow with support for `PKCE`
-2. Use this URI for the "Redirect URIs" field: `http://localhost:55183/Auth/LoginCallback`
-3. Use this URI for the "Allow CORS origins" field: `http://localhost:55183`
+2. Use this URI for the "Redirect URIs" field: `https://localhost:44333/Auth/LoginCallback`
+3. Use this URI for the "Allow CORS origins" field: `https://localhost:44333`
 4. Select both the `CoreEntities` and `Owners` permission with at least "ReadOnly"
 
 After creating your client, copy the `ClientId` generated for you. We'll use it in the next step.
@@ -47,16 +47,16 @@ ASP.NET Core apps have an `appsettings.json` file where all the configuration is
 That's it! The app should be good to go.
 
 ## Technology used
-* ASP.NET Core 2.2.0
+* ASP.NET Core MVC (.NET 6)
 * [IdentityModel][1] (We use the Crypto helper class/methods that generates the PKCE values)
 
 ## Usage
 You can run the app by either:
 
-- Opening and starting it within Visual Studio 2017
+- Opening and starting it within Visual Studio 2022
 - Run it from the command line. Just navigate to root directory and run `dotnet run`
 
-The app will run on `http://localhost:55183/`
+The app will run on `https://localhost:44333/`
 
 ## Example output
 Upon successfull authentication, a similar page should be displayed. (Depends if there are any owner accounts and locking devices.)

@@ -1,4 +1,4 @@
-﻿@model List<MVCAppAuthorizationCodePKCE.NETCore.Models.OwnerWithLocksViewModel>
+﻿@model List<MVCAppAuthorizationCodePKCE.NET.Models.OwnerWithLocksViewModel>
 
 <div class="text-center">
     <h1 class="display-4">Owner account locks</h1>
@@ -36,10 +36,10 @@
                     }
                     else
                     {
-                        <div class="card-deck">
+                        <div class="card-deck" >
                             @foreach (var ownerLock in ownerWithLocks.OwnerLocks)
                             {
-                                <div class="card mb-5" style="width: 18rem;">
+                                <div class="card" style="width: 10rem;">
                                     <img src="https://storage.googleapis.com/tapkey-media/tapkey_logo_blue_square.svg" class="card-img-top" alt="tapkey logo">
                                     <div class="card-body">
                                         <h5 class="card-title">@ownerLock.Title</h5>
