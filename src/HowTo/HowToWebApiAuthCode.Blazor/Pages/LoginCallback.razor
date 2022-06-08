@@ -1,0 +1,21 @@
+﻿@page "/Auth/LoginCallback"
+
+@using HowToWebApiAuthCode.Blazor.Data
+@using HowToWebApiAuthCode.Blazor.Models
+
+@inject AuthService AuthService
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "code")]
+    public string Code { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "state")]
+    public string State { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await AuthService.LoginCallback(Code, State);
+    }
+}
