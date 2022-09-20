@@ -1,0 +1,116 @@
+﻿@page "/owners"
+
+<PageTitle>Owner accounts</PageTitle>
+
+@using HowToWebApiAuthCode.Blazor.Data
+@using HowToWebApiAuthCode.Blazor.Models
+@inject TapkeyApi TapkeyApi
+
+<h1>Owner accounts</h1>
+
+<p>Create a grant for selected owner account and bound lock</p>
+
+<EditForm Model="@Model" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    @if (Model.Owners != null)
+    {
+        <p>Select an owner account</p>
+        <div>
+            <InputSelect TValue="string" ValueChanged="@OnOwnerAccountChanged" Value="@Model.SelectedOwnerAccount" ValueExpression="@(() => Model.SelectedOwnerAccount)" style="margin-bottom: 20px; width: auto;" class="form-select">
+                <option value=""></option>
+                @foreach (var owner in Model.Owners)
+                {
+                    <option value="@owner.id">@owner.name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Model.SelectedOwnerAccount)" />
+        </div>
+    }
+
+    @if (Model.BoundLocks != null)
+    {
+        @if (Model.BoundLocks.Length == 0)
+        {
+            <p style="margin-bottom: 20px;">No locks bound.</p>
+        }
+        else
+        {
+            <p>Select a bound lock</p>
+            <div>
+                <InputSelect TValue="string" ValueChanged="@OnBoundLockChanged" Value="@Model.SelectedBoundLock" ValueExpression="@(() => Model.SelectedBoundLock)" style="margin-bottom: 20px; width: auto;" class="form-select">
+                    <option value=""></option>
+                    @foreach (var boundLock in Model.BoundLocks)
+                    {
+                        <option value="@boundLock.id">@boundLock.title</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Model.SelectedBoundLock)" />
+            </div>
+        }
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SelectedBoundLock) && !string.IsNullOrEmpty(Model.SelectedOwnerAccount))
+    {
+        <p>Email to create grant for</p>
+        <div>
+            <InputText @bind-Value="Model.ContactEmail" style="margin-bottom: 20px; width: auto;" class="form-control" />
+            <ValidationMessage For="@(() => Model.ContactEmail)" />
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px;">Create grant</button>
+        </div>
+        <p>@Model.Message</p>
+    }
+</EditForm>
+
+@code {
+
+    private FormModel Model { get; set; } = new FormModel();
+
+    private async Task OnOwnerAccountChanged(string oa)
+    {
+        bool changed = Model.SelectedOwnerAccount != oa;
+        Model.SelectedOwnerAccount = oa;
+        if (changed)
+        {
+            await ReloadBoundLocks();
+        }
+
+        this.StateHasChanged();
+    }
+
+    private void OnBoundLockChanged(string bl)
+    {
+        Model.SelectedBoundLock = bl;
+    }
+
+    private async Task Submit()
+    {
+
+        var response = await TapkeyApi.CreateGrant(Model.SelectedOwnerAccount, new Grant() { boundLockId = Model.SelectedBoundLock, validBefore = DateTime.Now.AddDays(1), validFrom = DateTime.Now, contact = new Contact() { identifier = Model.ContactEmail } });
+        Model.Message = response ? "Grant created successfully!" : "There was an error creating grant.";
+        this.StateHasChanged();
+    }
+
+    private async Task ReloadBoundLocks()
+    {
+        Model.SelectedBoundLock = string.Empty;
+        if (!string.IsNullOrEmpty(Model.SelectedOwnerAccount))
+        {
+            Model.BoundLocks = await TapkeyApi.GetAllBoundLocks(Model.SelectedOwnerAccount);
+            this.StateHasChanged();
+        }
+    }
+
+    private async Task ReloadOwners()
+    {
+        Model.Owners = await TapkeyApi.GetAllOwnerAccounts();
+        this.StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Model.Owners == null)
+            await ReloadOwners();
+    }
+}

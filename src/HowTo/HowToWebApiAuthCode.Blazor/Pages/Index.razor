@@ -1,0 +1,25 @@
+﻿@page "/"
+@using HowToWebApiAuthCode.Blazor.Data
+
+@inject AuthService AuthService
+
+<div class="p-5">
+    <h1 class="mb-3">Authorization Code - Tapkey Web API</h1>
+    <p class="lead">
+        This Blazor application was created as part of the How to series of Tapkey. 
+    </p>
+    <p class="lead">
+        After successful connection of your owner account, you will be able to create grant for selected owner account, bound lock and user.
+    </p>
+    <hr class="my-4">
+    <p>To start the authentication, click in the button below!</p>
+
+    <button class="btn btn-primary btn-lg" @onclick="Authenticate">Click here to start</button>
+</div>
+
+@code {
+    protected async Task Authenticate()
+    {
+        await AuthService.Login();
+    }
+}
